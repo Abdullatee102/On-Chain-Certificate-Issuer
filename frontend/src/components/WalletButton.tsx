@@ -24,7 +24,7 @@ export const WalletButton: React.FC = () => {
   const [copied, setCopied] = useState(false);
 
   const truncatedAddress = address
-    ? `${address.substring(0, 6)}...${address.substring(address.length - 4)}`
+    ? `${address.substring(0, 5)}...${address.substring(address.length - 4)}`
     : "";
 
   const handleCopy = () => {
@@ -37,18 +37,18 @@ export const WalletButton: React.FC = () => {
 
   if (!isConnected) {
     return (
-      <div className="relative inline-block">
+      <div className="relative inline-block shrink-0">
         <button
           onClick={connectWallet}
           disabled={isConnecting}
-          className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-800 text-white font-semibold rounded-xl text-sm transition shadow-lg shadow-indigo-600/20 flex items-center gap-2"
+          className="px-3 py-1.5 sm:px-4 sm:py-2 bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-800 text-white font-semibold rounded-xl text-xs sm:text-sm transition shadow-lg shadow-indigo-600/20 flex items-center gap-1.5 sm:gap-2 shrink-0"
         >
-          <Wallet className="w-4 h-4" />
-          {isConnecting ? "Connecting Wallet..." : "Connect Wallet"}
+          <Wallet className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+          <span className="whitespace-nowrap">{isConnecting ? "Connecting..." : "Connect Wallet"}</span>
         </button>
 
         {error && (
-          <div className="absolute right-0 mt-2 w-72 bg-rose-950/95 border border-rose-800 rounded-xl p-3 shadow-2xl z-50 text-xs text-rose-200 backdrop-blur-md flex items-start justify-between gap-2">
+          <div className="absolute right-0 mt-2 w-64 sm:w-72 bg-rose-950/95 border border-rose-800 rounded-xl p-3 shadow-2xl z-50 text-xs text-rose-200 backdrop-blur-md flex items-start justify-between gap-2">
             <div className="flex items-start gap-2">
               <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
               <span>{error}</span>
@@ -63,27 +63,27 @@ export const WalletButton: React.FC = () => {
   }
 
   return (
-    <div className="relative">
+    <div className="relative shrink-0">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`px-3.5 py-2 rounded-xl text-sm font-semibold border transition flex items-center gap-2.5 ${
+        className={`px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold border transition flex items-center gap-1.5 sm:gap-2.5 shrink-0 ${
           !isSupportedNetwork
             ? "bg-rose-950/60 border-rose-800 text-rose-300"
             : "bg-slate-900 hover:bg-slate-800 border-slate-800 text-slate-200"
         }`}
       >
         {!isSupportedNetwork ? (
-          <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+          <AlertTriangle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
         ) : (
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
         )}
         <span className="font-mono text-xs">{truncatedAddress}</span>
-        <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+        <ChevronDown className={`w-3 h-3 text-slate-400 transition-transform ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
       {/* Dropdown Popover */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-2xl z-50 text-left backdrop-blur-md">
+        <div className="absolute right-0 mt-2 w-72 sm:w-80 bg-slate-900 border border-slate-800 rounded-2xl p-3.5 sm:p-4 shadow-2xl z-50 text-left backdrop-blur-md">
           {/* Unsupported network alert */}
           {!isSupportedNetwork && (
             <div className="mb-3 p-3 bg-rose-950/60 border border-rose-800/80 rounded-xl text-xs text-rose-300 space-y-2">

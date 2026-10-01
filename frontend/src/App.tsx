@@ -28,7 +28,7 @@ export const AppContent: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Shield className="w-4 h-4 text-indigo-400" />
-            <span>TechCrush Web3 Blockchain Capstone &mdash; Team C (Web3 Integration)</span>
+            <span>TechCrush Web3 Blockchain Capstone &mdash; Group 6</span>
           </div>
 
           <div className="flex items-center gap-4">
