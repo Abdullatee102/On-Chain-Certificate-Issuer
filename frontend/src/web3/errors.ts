@@ -5,6 +5,7 @@ export interface ParsedWeb3Error {
   isNotFound: boolean;
   isRevoked: boolean;
   isUnauthorized: boolean;
+  isSoulboundBlocked?: boolean;
   rawError?: any;
 }
 
@@ -42,6 +43,22 @@ export function parseWeb3Error(error: any): ParsedWeb3Error {
 
   // 2. Custom Solidity Errors
   if (
+    errString.includes("soulboundtokencannotbetransferred") ||
+    errString.includes("soulbound")
+  ) {
+    return {
+      friendlyMessage: "Soulbound Token Error: This certificate is bound to the recipient address and cannot be transferred or approved.",
+      code: "SoulboundTokenCannotBeTransferred",
+      isUserRejected: false,
+      isNotFound: false,
+      isRevoked: false,
+      isUnauthorized: false,
+      isSoulboundBlocked: true,
+      rawError: error,
+    };
+  }
+
+  if (
     errString.includes("certificatedoesnotexist") ||
     errString.includes("certificate does not exist")
   ) {
@@ -76,7 +93,7 @@ export function parseWeb3Error(error: any): ParsedWeb3Error {
     errString.includes("not authorized")
   ) {
     return {
-      friendlyMessage: "Unauthorized Action: Your wallet does not have permission for this operation.",
+      friendlyMessage: "Unauthorized Action: Your wallet is not authorized for this operation.",
       code: "NotAuthorized",
       isUserRejected: false,
       isNotFound: false,
@@ -89,7 +106,7 @@ export function parseWeb3Error(error: any): ParsedWeb3Error {
   // 3. Contract not configured error
   if (errString.includes("contract address is not configured")) {
     return {
-      friendlyMessage: "Contract Not Configured: Deployed contract address has not been provided by Team A.",
+      friendlyMessage: "Contract Not Configured: Deployed contract address is not configured.",
       code: "UNCONFIGURED_CONTRACT",
       isUserRejected: false,
       isNotFound: false,

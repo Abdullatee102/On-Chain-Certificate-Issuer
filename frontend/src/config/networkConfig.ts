@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Network Configuration
  * Configured for Ethereum Sepolia Testnet (Chain ID 11155111).
  * Override any value via the corresponding VITE_* environment variable in .env.local.
@@ -21,7 +21,7 @@ export const TARGET_NETWORK: NetworkInfo = {
   name: import.meta.env.VITE_NETWORK_NAME || "Ethereum Sepolia",
   rpcUrl:
     import.meta.env.VITE_RPC_URL ||
-    "https://eth-sepolia.g.alchemy.com/v2/alch_O3lMUYYKIRtlQdBGpNMCw",
+    "https://eth-sepolia.g.alchemy.com/v2/alch_ydAGy-RsnPpZC3p33So34",
   blockExplorerUrl:
     import.meta.env.VITE_BLOCK_EXPLORER_URL || "https://sepolia.etherscan.io",
   isConfigured: true,

@@ -1,4 +1,4 @@
-﻿import { ethers } from "ethers";
+import { ethers } from "ethers";
 
 declare global {
   interface Window {
@@ -29,7 +29,7 @@ export function getBrowserProvider(): ethers.BrowserProvider | null {
 }
 
 const FALLBACK_RPC_URL =
-  "https://eth-sepolia.g.alchemy.com/v2/alch_O3lMUYYKIRtlQdBGpNMCw";
+  "https://eth-sepolia.g.alchemy.com/v2/alch_ydAGy-RsnPpZC3p33So34";
 
 export async function getReadOnlyProvider(rpcUrl?: string): Promise<ethers.Provider> {
   const url = rpcUrl && rpcUrl !== "TBD" ? rpcUrl : FALLBACK_RPC_URL;

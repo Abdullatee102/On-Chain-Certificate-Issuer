@@ -6,14 +6,14 @@ import type { FormattedCertificate, RawCertificate } from "../contracts/types";
 function getContractInstance(runner: ethers.ContractRunner): ethers.Contract {
   if (!isContractConfigured()) {
     throw new Error(
-      "Contract Not Configured: The smart contract has not been deployed yet. Team A will supply the contract address once deployed."
+      "Contract Not Configured: The smart contract has not been deployed yet."
     );
   }
   return new ethers.Contract(CONTRACT_ADDRESS, CERTIFICATE_ISSUER_ABI, runner);
 }
 
 /**
- * Fetch certificate by ID on-chain
+ * Fetch certificate by ID on-chain with Soulbound ERC-721 tokenURI decoding
  */
 export async function fetchCertificateOnChain(
   runner: ethers.ContractRunner,
@@ -36,6 +36,30 @@ export async function fetchCertificateOnChain(
     }
   );
 
+  let owner: string | undefined;
+  let tokenURI: string | undefined;
+  let svgImage: string | undefined;
+
+  try {
+    owner = await contract.ownerOf(idBigInt);
+  } catch (e) {
+    console.warn("Could not fetch ownerOf:", e);
+  }
+
+  try {
+    tokenURI = await contract.tokenURI(idBigInt);
+    if (tokenURI && tokenURI.startsWith("data:application/json;base64,")) {
+      const base64Json = tokenURI.replace("data:application/json;base64,", "");
+      const jsonString = atob(base64Json);
+      const parsed = JSON.parse(jsonString);
+      if (parsed.image) {
+        svgImage = parsed.image;
+      }
+    }
+  } catch (e) {
+    console.warn("Could not fetch or decode tokenURI:", e);
+  }
+
   return {
     id: rawCert.id.toString(),
     recipient: rawCert.recipient,
@@ -46,6 +70,9 @@ export async function fetchCertificateOnChain(
     issueTimestamp,
     revoked: rawCert.revoked,
     isValid: !rawCert.revoked,
+    owner,
+    tokenURI,
+    svgImage,
   };
 }
 
@@ -80,4 +107,15 @@ export async function checkIsAuthorizedIssuerOnChain(
 ): Promise<boolean> {
   const contract = getContractInstance(runner);
   return await contract.authorizedIssuers(issuerAddress);
+}
+
+/**
+ * Query ERC-721 token balance of an account
+ */
+export async function fetchBalanceOfOnChain(
+  runner: ethers.ContractRunner,
+  account: string
+): Promise<bigint> {
+  const contract = getContractInstance(runner);
+  return await contract.balanceOf(account);
 }

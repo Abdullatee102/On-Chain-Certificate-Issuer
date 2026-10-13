@@ -18,6 +18,9 @@ export interface FormattedCertificate {
   issueTimestamp: number;
   revoked: boolean;
   isValid: boolean;
+  owner?: string;
+  tokenURI?: string;
+  svgImage?: string;
 }
 
 export type TxStatusType =

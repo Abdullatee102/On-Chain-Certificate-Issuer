@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { FormattedCertificate } from "../contracts/types";
 import { StatusBadge } from "./StatusBadge";
-import { Award, Building2, Calendar, Copy, Check, ExternalLink, User, ShieldCheck, Wallet } from "lucide-react";
+import { Award, Building2, Calendar, Copy, Check, ExternalLink, User, ShieldCheck, Wallet, Sparkles, Image as ImageIcon } from "lucide-react";
 import { TARGET_NETWORK } from "../config/networkConfig";
 
 interface CertificateResultCardProps {
@@ -42,10 +42,10 @@ export const CertificateResultCard: React.FC<CertificateResultCardProps> = ({
 
   return (
     <div
-      className={`relative bg-gradient-to-b from-slate-900 to-slate-950 border rounded-3xl p-6 sm:p-8 max-w-3xl mx-auto shadow-2xl overflow-hidden transition-all ${
+      className={`relative bg-gradient-to-b from-slate-900 to-slate-950 border rounded-3xl p-5 sm:p-8 max-w-4xl mx-auto shadow-2xl overflow-hidden transition-all ${
         certificate.revoked
           ? "border-rose-500/40 shadow-rose-950/20"
-          : "border-emerald-500/40 shadow-emerald-950/20"
+          : "border-indigo-500/40 shadow-indigo-950/20"
       }`}
     >
       {/* Decorative seal / watermark background */}
@@ -58,13 +58,16 @@ export const CertificateResultCard: React.FC<CertificateResultCardProps> = ({
             <Award className="w-7 h-7" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                 Verified On-Chain Certificate
               </span>
               <StatusBadge type={certificate.revoked ? "revoked" : "valid"} size="sm" />
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                <Sparkles className="w-3 h-3 text-indigo-400" /> Soulbound ERC-721
+              </span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-100 mt-0.5">
+            <h2 className="text-xl sm:text-2xl font-bold text-slate-100 mt-1">
               Certificate #{certificate.id}
             </h2>
           </div>
@@ -86,8 +89,27 @@ export const CertificateResultCard: React.FC<CertificateResultCardProps> = ({
         </button>
       </div>
 
+      {/* On-Chain Dynamic SVG Display Section */}
+      {certificate.svgImage && (
+        <div className="mt-6 mb-2">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+              <ImageIcon className="w-3.5 h-3.5 text-indigo-400" /> On-Chain Generated Certificate (tokenURI)
+            </span>
+            <span className="text-[11px] text-slate-500 font-mono">100% SVG On-Chain Data URI</span>
+          </div>
+          <div className="rounded-2xl overflow-hidden border border-slate-800 bg-slate-950/80 shadow-inner flex items-center justify-center p-2 sm:p-4">
+            <img
+              src={certificate.svgImage}
+              alt={`Certificate #${certificate.id} graphic`}
+              className="w-full max-w-2xl rounded-xl shadow-lg border border-slate-800/80 object-contain hover:scale-[1.01] transition-transform"
+            />
+          </div>
+        </div>
+      )}
+
       {/* Certificate Main Body */}
-      <div className="py-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="py-6 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {/* Recipient Name */}
         <div className="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4">
           <span className="text-xs font-medium text-slate-400 flex items-center gap-1.5">
@@ -124,7 +146,7 @@ export const CertificateResultCard: React.FC<CertificateResultCardProps> = ({
         <div className="md:col-span-2 bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-slate-400 flex items-center gap-1.5">
-              <Wallet className="w-3.5 h-3.5 text-indigo-400" /> Recipient Wallet Address
+              <Wallet className="w-3.5 h-3.5 text-indigo-400" /> Recipient Wallet (NFT Owner)
             </span>
             <button
               onClick={() => copyToClipboard(certificate.recipient, "address")}
@@ -134,14 +156,14 @@ export const CertificateResultCard: React.FC<CertificateResultCardProps> = ({
               {copiedField === "address" ? "Copied" : "Copy Address"}
             </button>
           </div>
-          <div className="mt-1 font-mono text-sm text-slate-200 break-all bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 flex items-center justify-between">
-            <span>{certificate.recipient}</span>
+          <div className="mt-1 font-mono text-xs sm:text-sm text-slate-200 break-all bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 flex items-center justify-between gap-2">
+            <span className="truncate">{certificate.recipient}</span>
             {TARGET_NETWORK.blockExplorerUrl !== "TBD" && (
               <a
                 href={`${TARGET_NETWORK.blockExplorerUrl}/address/${certificate.recipient}`}
                 target="_blank"
                 rel="noreferrer"
-                className="text-slate-400 hover:text-slate-200 ml-2"
+                className="text-slate-400 hover:text-slate-200 shrink-0"
                 title="View on Block Explorer"
               >
                 <ExternalLink className="w-4 h-4" />
@@ -158,11 +180,11 @@ export const CertificateResultCard: React.FC<CertificateResultCardProps> = ({
           <span>
             {certificate.revoked
               ? "Status: Revoked by Contract Owner on-chain"
-              : "Status: Cryptographically Valid & Immutable"}
+              : "Status: Cryptographically Valid & Soulbound"}
           </span>
         </div>
         <div className="font-mono text-slate-500">
-          Certificate Token ID: #{certificate.id}
+          Soulbound Token ID: #{certificate.id}
         </div>
       </div>
     </div>
