@@ -17,7 +17,7 @@ An immutable, decentralized educational credential verification and certificate 
 | **Deployment Transaction**   | [`0xbf7a0a6fa55c843806745d92a406b32fdaeaac0ecc85b4aff6b50dffbb59cbd6`](https://sepolia.etherscan.io/tx/0xbf7a0a6fa55c843806745d92a406b32fdaeaac0ecc85b4aff6b50dffbb59cbd6) |
 | **Block Explorer**           | [https://sepolia.etherscan.io](https://sepolia.etherscan.io)                                                                                                               |
 | **Confirmed Contract Owner** | `0x97184EBAEB9FDCe449d5FbaF1311601005F8E811`                                                                                                                               |
-| **Live Vercel Application**  | [https://on-chain-certificate-issuer.vercel.app/](https://on-chain-certificate-issuer.vercel.app/)                                                                         |
+| **Live Vercel Application**  | [https://on-chain-certificate-issuer-1g7f.vercel.app/](https://on-chain-certificate-issuer-1g7f.vercel.app/)                                                                         |
 
 ---
 

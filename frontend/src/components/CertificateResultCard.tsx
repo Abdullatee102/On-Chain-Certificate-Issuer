@@ -3,6 +3,7 @@ import type { FormattedCertificate } from "../contracts/types";
 import { StatusBadge } from "./StatusBadge";
 import { Award, Building2, Calendar, Copy, Check, ExternalLink, User, ShieldCheck, Wallet, Sparkles, Image as ImageIcon } from "lucide-react";
 import { TARGET_NETWORK } from "../config/networkConfig";
+import { getVerificationUrl } from "../config/appConfig";
 
 interface CertificateResultCardProps {
   certificate: FormattedCertificate | null;
@@ -74,7 +75,7 @@ export const CertificateResultCard: React.FC<CertificateResultCardProps> = ({
         </div>
 
         <button
-          onClick={() => copyToClipboard(window.location.href, "link")}
+          onClick={() => copyToClipboard(getVerificationUrl(certificate.id), "link")}
           className="self-start sm:self-center px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-xs font-semibold text-slate-300 flex items-center gap-1.5 transition"
         >
           {copiedField === "link" ? (

@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useWallet } from "../web3/walletContext";
 import { fetchCertificateOnChain } from "../web3/reads";
 import { parseWeb3Error } from "../web3/errors";
@@ -21,13 +21,12 @@ export const VerifyPage: React.FC = () => {
   const [notFound, setNotFound] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  const handleVerify = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const runVerification = async (certId: string) => {
     setErrorMsg(null);
     setCertificate(null);
     setNotFound(false);
 
-    const trimmedId = inputCertId.trim();
+    const trimmedId = certId.trim();
     if (!trimmedId || isNaN(Number(trimmedId)) || Number(trimmedId) <= 0) {
       setErrorMsg("Please enter a valid positive numeric Certificate ID.");
       return;
@@ -56,6 +55,23 @@ export const VerifyPage: React.FC = () => {
       setLoading(false);
     }
   };
+
+  const handleVerify = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await runVerification(inputCertId);
+  };
+
+  // Support direct URL verification links (e.g., /?id=1)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const idParam = params.get("id");
+      if (idParam && !isNaN(Number(idParam)) && Number(idParam) > 0) {
+        setInputCertId(idParam);
+        runVerification(idParam);
+      }
+    }
+  }, []);
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 px-4 pb-12">

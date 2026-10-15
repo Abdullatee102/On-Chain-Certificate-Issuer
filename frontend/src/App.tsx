@@ -8,7 +8,13 @@ import { AdminPage } from "./pages/AdminPage";
 import { Shield, Code2, ExternalLink } from "lucide-react";
 
 export const AppContent: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<NavTab>("home");
+    const [activeTab, setActiveTab] = useState<NavTab>(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has("id")) return "verify";
+    }
+    return "home";
+  });
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-indigo-500 selection:text-white">
